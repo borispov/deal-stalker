@@ -7,7 +7,7 @@ function stripCurrency(price) {
   return price.slice(1)
 } 
 
-class scrapeService {
+class ScrapeService {
 
   constructor() {
     this.currentPrice = this.currentPrice.bind(this)
@@ -26,7 +26,8 @@ class scrapeService {
   }
 }
 
-
+// Export The Class
+module.exports = new ScrapeService()
 
 // function retrieveUrlFromArgs() {
 //   const firstArgument = process.argv[2]
