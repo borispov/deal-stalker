@@ -4,7 +4,6 @@ const identifyMarket = require('./identifyMarket')
 const priceScreenshot = require('./priceScreenshot')
 
 
-
 class ScrapeService {
 
   constructor() {
@@ -15,10 +14,6 @@ class ScrapeService {
   isDomainSupported(URL){
     // return true
     return identifyMarket(URL)
-  }
-
-  priceComparison() {
-
   }
 
   async currentPrice(URL) {

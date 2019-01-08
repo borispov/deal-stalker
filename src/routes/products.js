@@ -3,6 +3,8 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 const ScrapeService = require('../lib/services/Scraper/scrape')
 
+const ProductService = require('../lib/services/Products/ProductService') 
+
 router.post('/product/getPrice', async (req, res) => {
   const url = req.body.url
 
@@ -15,6 +17,11 @@ router.post('/product/getPrice', async (req, res) => {
     res.status(200).json(price)
   }
 
+})
+
+router.get('/product/notif', async (req, res) => {
+  
+  let ProductService = await new ProductService()
 })
 
 
