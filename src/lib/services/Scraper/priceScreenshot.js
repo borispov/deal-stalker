@@ -1,6 +1,42 @@
 const puppeteer = require('puppeteer')
+const markets = require('./markets/index')
 
-module.exports = (async (URL) => {
+function stripCurrency(price) {
+  return price.slice(1)
+} 
+
+function filterSel(currentMarket) {
+  let market = {}
+
+  let name = currentMarket.join('').toLowerCase()
+  
+  switch (name) {
+    case 'amazon':
+      market = {
+        PRICE_ID: markets.AMAZON_PRODUCT_PRICE,
+        PRODUCT_TITLE: markets.AMAZON_PRODUCT_TITLE,
+        PRODUCT_IMAGE: markets.AMAZON_PRODUCT_IMAGE
+      }
+      return market
+  
+    case 'aliexpress':
+      market = {
+        PRICE_ID: markets.ALI_PRODUCT_TITLE,
+        PRODUCT_TITLE: markets.ALI_PRODUCT_TITLE,
+        PRODUCT_IMAGE: markets.ALI_PRODUCT_IMAGE
+      }
+    case 'ebay':
+      market = {
+        PRICE_ID: markets.EBAY_PRODUCT_TITLE,
+        PRODUCT_TITLE: markets.EBAY_PRODUCT_TITLE,
+        PRODUCT_IMAGE: markets.EBAY_PRODUCT_IMAGE
+      }
+    default:
+      return market
+  }
+}
+
+module.exports = async function (URL, market) {
 
   console.log(URL)
   if (!URL) {
@@ -8,17 +44,36 @@ module.exports = (async (URL) => {
   }
 
   const browser = await puppeteer.launch()
-  const PRICE_ID = 'priceblock_ourprice';
+
+  let marketSelectors = filterSel(market)
+  
+  const { PRICE_ID, PRODUCT_TITLE, PRODUCT_IMAGE } = marketSelectors
   const page = await browser.newPage()
   await page.goto(URL)
 
-  const getPrice = await page.evaluate((sel) => document.getElementById(sel).innerHTML, PRICE_ID)
+  let getPrice = await page.$(`#${PRICE_ID}`) !== null
+    ? (
+        console.log('found'),  
+        await page.evaluate((sel) => document.getElementById(sel).innerHTML, PRICE_ID)
+      )
+    : (
+        console.log('not found'),
+        await page.evaluate((sel) => document.getElementById(sel).innerHTML, 'priceblock_dealprice')
+      );
+      
+  const getImg = await page.evaluate((img) => document.getElementById(img).src, PRODUCT_IMAGE)
+  const getTitle = await page.evaluate((sel) => document.getElementById(sel).innerHTML, PRODUCT_TITLE)
 
   if ( isNaN(getPrice[0]) ) {
     const strippedPrice = stripCurrency(getPrice)
-    console.log(strippedPrice)
+    return {
+      price: strippedPrice,
+      title: getTitle,
+      img: getImg.trim()
+    }
     return strippedPrice
   }
 
   await browser.close()
-})()
+
+}

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/borispov/deal-stalker#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "express": "4.16.3",
     "express-session": "1.15.6",
     "puppeteer": "^1.11.0"
@@ -29,6 +30,7 @@
     "jest": "23.6.0",
     "nodemon": "*",
     "webpack": "4.19.1",
-    "webpack-cli": "3.1.0"
+    "webpack-cli": "3.1.0",
+    "ws": "^6.1.2"
   }
 }

@@ -3,9 +3,7 @@ const isURL = require('./isURL')
 const identifyMarket = require('./identifyMarket')
 const priceScreenshot = require('./priceScreenshot')
 
-function stripCurrency(price) {
-  return price.slice(1)
-} 
+
 
 class ScrapeService {
 
@@ -15,26 +13,27 @@ class ScrapeService {
   }
 
   isDomainSupported(URL){
+    // return true
     return identifyMarket(URL)
   }
 
-  async currentPrice(URL) {
-    let isValidUrl = await isURL(URL)
-    if ( !isValidUrl || !this.isDomainSupported(URL) ) throw new Error('invalid url request')
+  priceComparison() {
 
-    priceScreenshot(URL)
+  }
+
+  async currentPrice(URL) {
+    
+    let isValidUrl = await isURL(URL)
+    let theMarket = this.isDomainSupported(URL)
+    try {
+      if ( !isValidUrl ) throw new Error('invalid url request')
+      if ( !theMarket ) throw new Error('This domain is not supported by Deal-Stalk')
+      return priceScreenshot(URL, theMarket)    
+    } catch(err) {
+        return err
+    }
   }
 }
 
 // Export The Class
-module.exports = new ScrapeService()
-
-// function retrieveUrlFromArgs() {
-//   const firstArgument = process.argv[2]
-//   console.log(firstArgument)
-//   console.log(isURL(firstArgument))
-
-//   if ( isURL(firstArgument) ) return firstArgument
-//   return undefined
-// }
-
+module.exports = ScrapeService
