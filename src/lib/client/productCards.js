@@ -9,6 +9,8 @@ module.exports = function createDeck(title, price, src) {
 
   const card = document.createElement('div')
   card.classList.add('card')
+  card.style.display = 'flex'
+  card.style.flexFlow = 'row nowrap'
   card.style.width = '18rem'
 
   const img = document.createElement('img')

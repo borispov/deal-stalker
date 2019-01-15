@@ -3,6 +3,10 @@ const app = express()
 const bodyParser = require('body-parser')
 const path = require('path')
 
+const productService = require('./lib/services/Products/ProductService')
+
+let newService = new productService()
+
 const prodRoutes = require('./routes/products')
 
 app.use(bodyParser.urlencoded({ extended: false }))

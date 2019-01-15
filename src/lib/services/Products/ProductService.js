@@ -1,9 +1,12 @@
+const sendMail = require('../../config/index')
+const productModel = require('./ProductModel')
 
 
 class prodService {
 
   constructor() {
     this.comparePrices = this.comparePrices.bind(this)
+    this.notifyUser = this.notifyUser.bind(this)
   }
 
   // return the percentage difference between prices
@@ -19,6 +22,7 @@ class prodService {
 
 
   notifyUser() {
+    sendMail(author, recipient, title, body)
     // use some functions from libraries to send SMS/EMAIL to user.
   }
 
